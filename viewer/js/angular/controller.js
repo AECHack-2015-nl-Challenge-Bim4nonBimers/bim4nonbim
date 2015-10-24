@@ -6,6 +6,15 @@ angular.module('main')
     .controller('MainCtrl', ['$scope',function($scope) {
     	$scope.propertyLists = []
     	
+    	$scope.select = function(propertyList){
+    		$scope.propertyLists.forEach(function(item){
+    			if(propertyList !== item){
+    					item.isSelected = false	
+    			}
+    		})
+    		propertyList.isSelected = !propertyList.isSelected
+
+    	}
     	
     	var viewer = function () {
             var bimServerApi, viewer, loadedModel;
@@ -54,7 +63,7 @@ angular.module('main')
                         var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
                         var mat = loadedModel.objects[materialId];
                         if("IfcPropertySet" === mat.getType()){
-                        	var object = {name : mat.getName(), properties:[]};
+                        	var object = {name : mat.getName(), oid:relId, isSelected:false, properties:[]};
                         	mat.object._rHasProperties.forEach(function(matId){
                                 var material = loadedModel.objects[matId];
                                 if("IfcPropertySingleValue" === material.getType() ){
