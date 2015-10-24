@@ -6,9 +6,22 @@ angular.module('main')
     .controller('MainCtrl', ['$scope',function($scope) {
     	$scope.propertyLists = []
     	
+    	$scope.select = function(propertyList){
+    		$scope.propertyLists.forEach(function(item){
+    			if(propertyList !== item){
+    					item.isSelected = false	
+    			}
+    		});
+    		propertyList.isSelected = !propertyList.isSelected;
+            if(propertyList.isSelected){
+                viewer.selectObjects(propertyList.oid);
+
+            }
+
+    	};
     	
     	var viewer = function () {
-            var bimServerApi, viewer, loadedModel;
+            var bimServerApi, viewer, loadedModel, clickSelect;
             var preLoadQuery = {
                 queries: [
                     {
@@ -54,22 +67,19 @@ angular.module('main')
                         var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
                         var mat = loadedModel.objects[materialId];
                         if("IfcPropertySet" === mat.getType()){
-                        	$scope.$apply(function(){
-                                mat.object._rHasProperties.forEach(function(matId){
-                                    var material = loadedModel.objects[matId];
-                                    if("IfcPropertySingleValue" === material.getType() ){
-                                        console.log(material.getName());
-                                        console.log(material.object._eNominalValue._v);
+                        	var object = {name : mat.getName(), oid:relId, isSelected:false, properties:[]};
+                        	mat.object._rHasProperties.forEach(function(matId){
+                                var material = loadedModel.objects[matId];
+                                if("IfcPropertySingleValue" === material.getType() ){
+                                    object.properties.push({name : material.getName(), value:material.object._eNominalValue._v})
 
-                                    }
-                                    });
-                        		var object = {name : mat.getName()};
+                                }
+                            });
+                        	$scope.$apply(function(){
                         		$scope.propertyLists.push(object)  
                         	})                       
                         }
-//                        console.log(mat.getType());
-                        var relatedObjects = relDefByProp.object._rRelatedObjects; //objects
-                        
+
 
                     });
                 }
@@ -87,10 +97,10 @@ angular.module('main')
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
                         bimServerApi = api;
                         bimServerApi.init(function () {
-                            bimServerApi.login("admin@bimserver.com ", "admin", function (data) {
+                            bimServerApi.login("admin@bimserver.com", "admin", function (data) {
                                 viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                                 viewer.loadScene(function () {
-                                    var clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
+                                    clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
                                     clickSelect.activate();
                                     clickSelect.events.register('select', nodeSelected);
                                     clickSelect.events.register('unselect', nodeUnselected);
@@ -120,6 +130,14 @@ angular.module('main')
                         });
                     });
 
+                },
+                selectObjects: function selectObjects(selectedId) {
+                    var selectedRel = loadedModel.objects[selectedId];
+                    var relatedObjects = selectedRel.object._rRelatedObjects;
+                    relatedObjects.forEach(function(oid){
+                        clickSelect.pick({nodeId: oid});
+                        console.log(loadedModel.objects[oid]);
+                    });
                 }
 
             }
