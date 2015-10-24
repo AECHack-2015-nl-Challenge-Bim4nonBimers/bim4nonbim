@@ -81,6 +81,6 @@ var viewer = function () {
         }
 
     }
-}(revisionId);
+}();
 
 //65539 revisionId
