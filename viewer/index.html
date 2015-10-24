@@ -9,15 +9,16 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" charset="utf-8">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/LayerList.css">
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ObjectTreeView.css">
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ProgressBar.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/LayerList.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ObjectTreeView.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ProgressBar.css">
     
     
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="http://scenejs.org/api/latest/scenejs.js"></script>
     
     <script src="./js/lib/ui-bootstrap-tpls-0.13.4.min.js"></script>
     
@@ -25,31 +26,31 @@
     <script src="./js/angular/controller.js"></script>
     <script src="js/viewer.js"></script>
     
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/AsyncStream.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/BIMSURFER.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Constants.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/DatainputStream.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Events.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/GeometryLoader.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/ProgressLoader.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/SceneJS.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/StringView.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Util.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Viewer.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/AsyncStream.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/BIMSURFER.js"></script>
+    <script  type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Constants.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/DataInputStream.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Events.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/GeometryLoader.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/ProgressLoader.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/SceneJS.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/StringView.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Util.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Viewer.js"></script>
     
     
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Ambient.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Camera.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Sun.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Ambient.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Camera.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Sun.js"></script>
     
     
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ClickSelect.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/LayerList.js"></script>
-	<script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ObjectTreeView.js"></script>
-	<script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/PickFlyOrbit.js"></script>
-    <script src="https://raw.githubusercontent.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ProgressBar.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ClickSelect.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/LayerList.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ObjectTreeView.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/PickFlyOrbit.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ProgressBar.js"></script>
     
     
     
