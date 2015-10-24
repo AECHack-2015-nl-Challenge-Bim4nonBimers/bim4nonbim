@@ -1,27 +1,32 @@
 var viewer = function () {
-    var bimServerApi, viewer;
+    var bimServerApi, viewer, loadedModel;
     var preLoadQuery = {
         queries: [
             {
                 type: "IfcProduct",
                 includeAllSubtypes: true
+            },
+            {
+                type: "IfcPropertySet",
+                include: [
+                    {field: "HasProperties"},
+                    {
+                        field: "PropertyDefinitionOf"
+                    }
+                ]
+            },
+            {
+                type: "IfcRelDefinesByProperties",
+                include: {field: "RelatingPropertyDefinition"}
             }
         ]
     };
 
     function Notifier() {
-        this.setSelector = function (selector) {
-        };
-        this.clear = function () {
-        };
-        this.resetStatus = function () {
-        };
-        this.resetStatusQuick = function () {
-        };
-        this.setSuccess = function (status, timeToShow) {
+        this.setSuccess = function (status) {
             console.log("success", status);
         };
-        this.setInfo = function (info, timeToShow) {
+        this.setInfo = function (info) {
             console.log("info", info);
         };
         this.setError = function (error) {
@@ -30,8 +35,17 @@ var viewer = function () {
     }
 
 
-    function nodeSelected() {
-        //todo: when element is selected
+    function nodeSelected(revId, node) {
+        var object = loadedModel.objects[node.id];
+        if(object){
+            var propSets = object.object._rIsDefinedBy;
+            propSets.forEach(function(relId) {
+                var relDefByProp = loadedModel.objects[relId];
+                var materials = relDefByProp.object._rRelatingPropertyDefinition; //materials
+                var relatedObjects = relDefByProp.object._rRelatedObjects; //objects
+                console.log(relDefByProp);
+            });
+        }
     }
 
     function nodeUnselected() {
@@ -47,7 +61,6 @@ var viewer = function () {
                 bimServerApi = api;
                 bimServerApi.init(function () {
                     bimServerApi.login("admin@bimserver.com ", "admin", function (data) {
-                        console.log(data);
                         viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                         viewer.loadScene(function () {
                             var clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
@@ -59,11 +72,12 @@ var viewer = function () {
                         var oidsNotLoaded = [], model, ifcProject;
                         var models = {};
                         bimServerApi.getModel(131073, 65539, "ifc2x3tc1", false, function (model) {
+                            window.model = model;
+                            loadedModel = model;
                             model.loaded = true;
-                            console.log("before query");
                             models[65539] = model;
                             model.query(preLoadQuery, function (loadedObject) {
-                                console.log(loadedObject);
+
                                 if (loadedObject.isA("IfcProduct")) {
                                     oidsNotLoaded.push(loadedObject.oid);
                                     loadedObject.trans.mode = 0;
