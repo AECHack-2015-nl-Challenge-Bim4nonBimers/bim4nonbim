@@ -67,11 +67,29 @@
     	}
     	#main-holder, .column{
     		height : 100%;
+    	}
+    	#main-holder{
     		margin-top : 50px;
     	}
     	.right-column{
-    		background : #ccc;
+    		border-left : 1px solid #999;
+    		padding : 10px;
     	}
+    	.property-list-holder{
+    		margin-left : 5%;
+    	}
+    	.property-list-name{
+    		font-size : 2em;
+    		color:#999;
+    	}
+    	.property-list-name:hover{
+    		text-decoration:underline;
+    		cursor:pointer;
+    	}
+    	.property-item{
+    		margin-left : 5%;	
+    	}
+    	
     </style>
     <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -108,6 +126,12 @@
             </div>
    		</div>
    		<div class="col-md-4 column right-column">
+   			<div ng-repeat="propertyList in  propertyLists" class="property-list-holder">
+   				<div class="property-list-name">{{propertyList.name}}</div>
+   				<div class="properties-holder">
+   					<div class="property-item" ng-repeat="property in propertyList.properties">{{property.name}} : {{property.value}}</div>
+   				</div>
+   			</div>
    		</div>
    	</div>
     </body>

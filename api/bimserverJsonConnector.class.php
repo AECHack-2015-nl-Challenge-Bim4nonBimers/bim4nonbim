@@ -59,7 +59,7 @@ class bimserverJsonConnector {
         return $result;
     }
 
-  public static function drupal_set_message($msg,$state,$flag){
+  public static function drupal_set_message($msg,$state,$flag = false){
    echo ("\n[$state] $msg\n");
   }
 
@@ -514,17 +514,17 @@ class bimserverJsonConnector {
     if(is_array($ret) && is_array($ret['response'])) {
       //$this->setLoginToken($ret->response->result);
       $this->setLoginToken($ret['response']['result']);
+    } else if(is_object($ret) && isset($ret->response)) {
+        $this->setLoginToken($ret->response->result);
     }
     else {
       bimserverJsonConnector::drupal_set_message("Login Failed: Return object was not a array",'error',false);
     }
     //var_dump($this->getLoginToken());
     //$this->login_token = $ret['response']['result'];
-    var_dump($ret);
 
-    exit;
-    if (isset($ret['response']['result'])) {
-      $this->login_token = $ret['response']['result'];
+    if (isset($ret->response->result)) {
+      $this->login_token = $ret->response->result;
     }
     else {
       $this->login_token = "LOGIN FAILED!";
@@ -592,8 +592,8 @@ class bimserverJsonConnector {
     $params["onlyTopLevel"] = $onlyTopLevel;
     $params['onlyActive'] = $onlyActive;
     $ret = $this->doPost("Bimsie1ServiceInterface", "getAllProjects", $params);
-    if (isset($ret['response']['result'])) {
-      return $ret['response']['result'];
+    if (isset($ret->response->result)) {
+      return $ret->response->result;
     }
     return NULL;
   }
@@ -874,12 +874,7 @@ class bimserverJsonConnector {
     $fixed = 0;
     $options['data'] = str_replace("\"{}\"", "{}", $options['data'], $fixed);
     if (!empty($fixed)) {
-      watchdog('BMS-Bimserver Proxy', "Swapped  '\"{}\"' for '{} [%fixed_cnt*]\nProxy Called:=%interface.%methode(%params)'.", array(
-        '%fixed_cnt' => $fixed,
-        '%interface' => $interface,
-        '%methode' => $method,
-        '%params' => $options['data']
-      ), WATCHDOG_DEBUG);
+      bimserverJsonConnector::drupal_set_message('BMS-Bimserver Proxy', "Swapped  '\"{}\"' for '{} [$fixed*]\nProxy Called:=$interface.$methode($params)'.");
       //drupal_set_message("Fixed $fixed \"{}\" to {}.",'warning');
     }
     if($DEBUG) {
