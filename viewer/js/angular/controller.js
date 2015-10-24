@@ -108,11 +108,11 @@ angular.module('main')
 
                                 var oidsNotLoaded = [], model, ifcProject;
                                 var models = {};
-                                bimServerApi.getModel(196609, 131075, "ifc2x3tc1", false, function (model) {
+                                bimServerApi.getModel(131073, 65539, "ifc2x3tc1", false, function (model) {
                                     window.model = model;
                                     loadedModel = model;
                                     model.loaded = true;
-                                    models[131075] = model;
+                                    models[65539] = model;
                                     model.query(preLoadQuery, function (loadedObject) {
 
                                         if (loadedObject.isA("IfcProduct")) {
@@ -121,7 +121,7 @@ angular.module('main')
                                         }
                                     }).done(function () {
                                         var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
-                                        geoLoad.setLoadOids([131075], oidsNotLoaded);
+                                        geoLoad.setLoadOids([65539], oidsNotLoaded);
                                         viewer.loadGeometry(geoLoad);
                                     });
                                 });
