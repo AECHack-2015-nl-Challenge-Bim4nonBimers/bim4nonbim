@@ -7,12 +7,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" charset="utf-8">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
     
+    <script src="./js/lib/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    
+    <script src="./js/angular/app.js"></script>
+     <script src="./js/angular/controller.js"></script>
     <script src="/static/js/lib/angular-scroll.js"></script>
     <script src="js/viewer.js"></script>
     <style>
@@ -21,6 +25,7 @@
     	}
     	#main-holder, .column{
     		height : 100%;
+    		margin-top : 50px;
     	}
     	.right-column{
     		background : #ccc;
@@ -55,9 +60,8 @@
         </div>
         <!-- /.container -->
     </nav>
-   	<div id="main-holder" class="fluid-container">
+   	<div id="main-holder" class="fluid-container" ng-controller="MainCtrl">
    		<div class="col-md-8 column">
-            <div id="viewport"></div>
    		</div>
    		<div class="col-md-4 column right-column">
    		</div>
