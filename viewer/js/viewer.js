@@ -1,5 +1,5 @@
 var viewer = function () {
-    var bimServerApi;
+    var bimServerApi, viewer;
     return {
         init: function init(revisionId) {
                 var address = 'address';
@@ -13,7 +13,11 @@ var viewer = function () {
 
         },
         start: function start(revisionId){
-
+            viewer = new BIMSURFER.Viewer(bimServerAPI, "viewport");
+            viewer.drawCanvas = function () {
+                var canvas = viewer.drawCanvas.bind(viewer);
+                canvas[0].getContext("experimental-webgl", {preserveDrawingBuffer: true});
+            }
         }
     }
-}(loadProject);
+}(revisionId);
