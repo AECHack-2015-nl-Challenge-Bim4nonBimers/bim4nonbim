@@ -3,44 +3,44 @@
  */
 
 angular.module('main')
-    .controller('MainCtrl', ['$scope',function($scope) {
-    	$scope.propertyLists = []
-    	
-    	$scope.select = function(propertyList){
-    		$scope.propertyLists.forEach(function(item){
-    			if(propertyList !== item){
-    					item.isSelected = false	
-    			}
-    		});
-    		propertyList.isSelected = !propertyList.isSelected;
-            if(propertyList.isSelected){
+    .controller('MainCtrl', ['$scope', function ($scope) {
+        $scope.propertyLists = []
+
+        $scope.select = function (propertyList) {
+            $scope.propertyLists.forEach(function (item) {
+                if (propertyList !== item) {
+                    item.isSelected = false
+                }
+            });
+            propertyList.isSelected = !propertyList.isSelected;
+            if (propertyList.isSelected) {
                 viewer.selectObjects(propertyList.oid);
 
             }
 
-    	};
-    	
-    	var viewer = function () {
-            var bimServerApi, viewer, loadedModel, clickSelect;
+        };
+
+        var viewer = function () {
+            var bimServerApi, viewer, loadedModel, clickSelect, selectedobjects = [];
             var preLoadQuery = {
                 queries: [
                     {
                         type: "IfcProduct",
                         includeAllSubtypes: true
+                    },
+                    {
+                        type: "IfcPropertySet",
+                        include: [
+                            {field: "HasProperties"},
+                            {
+                                field: "PropertyDefinitionOf"
+                            }
+                        ]
+                    },
+                    {
+                        type: "IfcRelDefinesByProperties",
+                        include: {field: "RelatingPropertyDefinition"}
                     }
-//                    {
-//                        type: "IfcPropertySet",
-//                        include: [
-//                            {field: "HasProperties"},
-//                            {
-//                                field: "PropertyDefinitionOf"
-//                            }
-//                        ]
-//                    },
-//                    {
-//                        type: "IfcRelDefinesByProperties",
-//                        include: {field: "RelatingPropertyDefinition"}
-//                    }
                 ]
             };
 
@@ -58,30 +58,38 @@ angular.module('main')
 
 
             function nodeSelected(revId, node) {
-                $scope.propertyLists=[]
-            	var object = loadedModel.objects[node.id];
-                if(object){
+                selectedobjects[node.id] = {selected: true};
+                $scope.$apply(function () {
+                    $scope.propertyLists = []
+                });
+                var object = loadedModel.objects[node.id];
+                if (object) {
                     var propSets = object.object._rIsDefinedBy;
-                    propSets.forEach(function(relId) {
-                        var relDefByProp = loadedModel.objects[relId];
-                        var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
-                        var mat = loadedModel.objects[materialId];
-                        if("IfcPropertySet" === mat.getType()){
-                        	var object = {name : mat.getName(), oid:relId, isSelected:false, properties:[]};
-                        	mat.object._rHasProperties.forEach(function(matId){
-                                var material = loadedModel.objects[matId];
-                                if("IfcPropertySingleValue" === material.getType() ){
-                                    object.properties.push({name : material.getName(), value:material.object._eNominalValue._v})
+                    if (propSets) {
+                        propSets.forEach(function (relId) {
+                            var relDefByProp = loadedModel.objects[relId];
+                            var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
+                            var mat = loadedModel.objects[materialId];
+                            if (mat && "IfcPropertySet" === mat.getType()) {
+                                var object = {name: mat.getName(), oid: relId, isSelected: false, properties: []};
+                                if (mat.object._rHasProperties) {
 
+                                    mat.object._rHasProperties.forEach(function (matId) {
+                                        var material = loadedModel.objects[matId];
+                                        if ("IfcPropertySingleValue" === material.getType()) {
+                                            object.properties.push({name: material.getName(), value: material.object._eNominalValue._v})
+
+                                        }
+                                    });
                                 }
-                            });
-                        	$scope.$apply(function(){
-                        		$scope.propertyLists.push(object)  
-                        	})                       
-                        }
+                                $scope.$apply(function () {
+                                    $scope.propertyLists.push(object)
+                                })
+                            }
 
 
-                    });
+                        });
+                    }
                 }
             }
 
@@ -134,18 +142,20 @@ angular.module('main')
                 selectObjects: function selectObjects(selectedId) {
                     var selectedRel = loadedModel.objects[selectedId];
                     var relatedObjects = selectedRel.object._rRelatedObjects;
-                    relatedObjects.forEach(function(oid){
-                        clickSelect.pick({nodeId: oid});
-                        console.log(loadedModel.objects[oid]);
+                    relatedObjects.forEach(function (oid) {
+                        if(!selectedobjects[oid]) {
+                            clickSelect.pick({nodeId: oid});
+                            console.log(loadedModel.objects[oid]);
+                        }
                     });
                 }
 
             }
         }();
 
-    	//65539 revisionId
-    	viewer.init();
-    	
-    	
-	}])
+//65539 revisionId
+        viewer.init();
+
+
+    }]);
 
