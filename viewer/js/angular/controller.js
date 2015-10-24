@@ -4,7 +4,7 @@
 
 angular.module('main')
     .controller('MainCtrl', ['$scope',function($scope) {
-    	$scope.propertyLists = [{id:'10',name:'test',properties:[{name:'1',value:'val1'}, {name:'2',value:'val2'}]}]
+    	$scope.propertyLists = []
     	
     	
     	var viewer = function () {
@@ -45,19 +45,24 @@ angular.module('main')
 
 
             function nodeSelected(revId, node) {
-                var object = loadedModel.objects[node.id];
+                $scope.propertyLists=[]
+            	var object = loadedModel.objects[node.id];
                 if(object){
                     var propSets = object.object._rIsDefinedBy;
                     propSets.forEach(function(relId) {
                         var relDefByProp = loadedModel.objects[relId];
                         var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
                         var mat = loadedModel.objects[materialId];
+                        console.log(mat)
                         if("IfcPropertySet" === mat.getType()){
-                           console.log( mat.getName());
-                           console.log( mat);
+                        	$scope.$apply(function(){
+                        		var object = {name : mat.getName()}
+                        		$scope.propertyLists.push(object)  
+                        	})                       
                         }
 //                        console.log(mat.getType());
                         var relatedObjects = relDefByProp.object._rRelatedObjects; //objects
+                        
 
                     });
                 }
@@ -114,7 +119,7 @@ angular.module('main')
         }();
 
     	//65539 revisionId
-    	//viewer.init(65539);
+    	viewer.init(65539);
     	
     	
 	}])
