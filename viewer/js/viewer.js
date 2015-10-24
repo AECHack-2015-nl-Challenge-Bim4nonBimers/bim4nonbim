@@ -32,6 +32,27 @@ var viewer = function () {
         ]
     };
 
+    function Notifier() {
+        this.setSelector = function (selector) {
+        };
+        this.clear = function () {
+        };
+        this.resetStatus = function () {
+        };
+        this.resetStatusQuick = function () {
+        };
+        this.setSuccess = function (status, timeToShow) {
+            console.log("success", status);
+        };
+        this.setInfo = function (info, timeToShow) {
+            console.log("info", info);
+        };
+        this.setError = function (error) {
+            console.log("error", error);
+        };
+    }
+
+
     function nodeSelected() {
         //todo: when element is selected
     }
@@ -47,6 +68,7 @@ var viewer = function () {
             bimServerApi = new BimServerApi(address, notifier);
             bimServerApi.init(function () {
                 bimServerApi.login("admin@bimserver.com ", "admin", true, function (data) {
+                    console.log(data);
                     start(bimServerApi, revisionId);
                 });
             });
