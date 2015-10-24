@@ -18,7 +18,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-    <script src="http://scenejs.org/api/latest/scenejs.js"></script>
+    <script src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/lib/scenejs/scenejs.js"></script>
+    <script src="https://rawgit.com/opensourceBIM/bimvie.ws/master/js/String.js"></script>
 
     <script src="./js/lib/ui-bootstrap-tpls-0.13.4.min.js"></script>
 
@@ -54,12 +55,9 @@
 
 
 
-    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_Ifc2x3tc1.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_BimServerApi.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_BimServerApiPromise.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_BimServerWebSocket.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_Model.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_Translations_EN.js"></script>
+    <script type="text/javascript" src="js/require.js"></script>
+    <script type="text/javascript" src="js/bimserverapibootstrap.js"></script>
+
 
       <script src="js/viewer.js"></script>
 
@@ -106,6 +104,8 @@
     </nav>
    	<div id="main-holder" class="fluid-container" ng-controller="MainCtrl">
    		<div class="col-md-8 column">
+            <div id="viewport" style="width: 1000px; height: 800px;">
+            </div>
    		</div>
    		<div class="col-md-4 column right-column">
    		</div>
