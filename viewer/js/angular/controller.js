@@ -6,6 +6,7 @@ angular.module('main')
     .controller('MainCtrl', ['$scope',function($scope) {
     	$scope.propertyLists = [{id:'10',name:'test',properties:[{name:'1',value:'val1'}, {name:'2',value:'val2'}]}]
     	
+    	
     	var viewer = function () {
             var bimServerApi, viewer, loadedModel;
             var preLoadQuery = {
@@ -113,7 +114,7 @@ angular.module('main')
         }();
 
     	//65539 revisionId
-    	viewer.init(65539);
+    	//viewer.init(65539);
     	
     	
 	}])

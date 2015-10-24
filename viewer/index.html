@@ -21,7 +21,7 @@
     <script src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/lib/scenejs/scenejs.js"></script>
     <script src="https://rawgit.com/opensourceBIM/bimvie.ws/master/js/String.js"></script>
 
-    <script src="./js/lib/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <script src="./js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
     <script src="./js/angular/app.js"></script>
     <script src="./js/angular/controller.js"></script>
@@ -126,8 +126,8 @@
    		</div>
    		<div class="col-md-4 column right-column">
    			<div ng-repeat="propertyList in  propertyLists" class="property-list-holder">
-   				<div class="property-list-name">{{propertyList.name}}</div>
-   				<div class="properties-holder">
+   				<div class="property-list-name"  ng-click="propertyList.isCollapsed = !propertyList.isCollapsed">{{propertyList.name}}</div>
+   				<div class="properties-holder" uib-collapse="!propertyList.isCollapsed">
    					<div class="property-item" ng-repeat="property in propertyList.properties">{{property.name}} : {{property.value}}</div>
    				</div>
    			</div>
