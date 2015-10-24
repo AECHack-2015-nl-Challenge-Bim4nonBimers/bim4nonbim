@@ -49,9 +49,15 @@ angular.module('main')
                     var propSets = object.object._rIsDefinedBy;
                     propSets.forEach(function(relId) {
                         var relDefByProp = loadedModel.objects[relId];
-                        var materials = relDefByProp.object._rRelatingPropertyDefinition; //materials
+                        var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
+                        var mat = loadedModel.objects[materialId];
+                        if("IfcPropertySet" === mat.getType()){
+                           console.log( mat.getName());
+                           console.log( mat);
+                        }
+//                        console.log(mat.getType());
                         var relatedObjects = relDefByProp.object._rRelatedObjects; //objects
-                        console.log(relDefByProp);
+
                     });
                 }
             }
