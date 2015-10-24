@@ -27,20 +27,20 @@ angular.module('main')
                     {
                         type: "IfcProduct",
                         includeAllSubtypes: true
-                    },
-                    {
-                        type: "IfcPropertySet",
-                        include: [
-                            {field: "HasProperties"},
-                            {
-                                field: "PropertyDefinitionOf"
-                            }
-                        ]
-                    },
-                    {
-                        type: "IfcRelDefinesByProperties",
-                        include: {field: "RelatingPropertyDefinition"}
                     }
+//                    {
+//                        type: "IfcPropertySet",
+//                        include: [
+//                            {field: "HasProperties"},
+//                            {
+//                                field: "PropertyDefinitionOf"
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        type: "IfcRelDefinesByProperties",
+//                        include: {field: "RelatingPropertyDefinition"}
+//                    }
                 ]
             };
 
@@ -108,11 +108,11 @@ angular.module('main')
 
                                 var oidsNotLoaded = [], model, ifcProject;
                                 var models = {};
-                                bimServerApi.getModel(131073, 65539, "ifc2x3tc1", false, function (model) {
+                                bimServerApi.getModel(196609, 196611, "ifc2x3tc1", false, function (model) {
                                     window.model = model;
                                     loadedModel = model;
                                     model.loaded = true;
-                                    models[65539] = model;
+                                    models[196611] = model;
                                     model.query(preLoadQuery, function (loadedObject) {
 
                                         if (loadedObject.isA("IfcProduct")) {
@@ -121,7 +121,7 @@ angular.module('main')
                                         }
                                     }).done(function () {
                                         var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
-                                        geoLoad.setLoadOids([65539], oidsNotLoaded);
+                                        geoLoad.setLoadOids([196611], oidsNotLoaded);
                                         viewer.loadGeometry(geoLoad);
                                     });
                                 });
@@ -144,7 +144,7 @@ angular.module('main')
         }();
 
     	//65539 revisionId
-    	viewer.init(65539);
+    	viewer.init();
     	
     	
 	}])
