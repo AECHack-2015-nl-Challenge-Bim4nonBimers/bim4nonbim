@@ -81,6 +81,10 @@
     		font-size : 2em;
     		color:#999;
     	}
+    	.property-list-name i{
+    		margin-right : 5px;
+
+    	}
     	.property-list-name:hover{
     		text-decoration:underline;
     		cursor:pointer;
@@ -126,7 +130,10 @@
    		</div>
    		<div class="col-md-4 column right-column">
    			<div ng-repeat="propertyList in  propertyLists" class="property-list-holder">
-   				<div class="property-list-name"  ng-click="propertyList.isCollapsed = !propertyList.isCollapsed">{{propertyList.name}}</div>
+   				<div class="property-list-name"  ng-click="propertyList.isCollapsed = !propertyList.isCollapsed">
+	   				<i class="fa fa-caret-right" ng-show="!propertyList.isCollapsed"></i>
+	   				<i class="fa fa-caret-down" ng-show="propertyList.isCollapsed"></i>{{propertyList.name}}
+	   			</div>
    				<div class="properties-holder" uib-collapse="!propertyList.isCollapsed">
    					<div class="property-item" ng-repeat="property in propertyList.properties">{{property.name}} : {{property.value}}</div>
    				</div>
