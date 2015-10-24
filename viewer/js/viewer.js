@@ -13,7 +13,7 @@ var viewer = function () {
 
         },
         start: function start(revisionId){
-            viewer = new BIMSURFER.Viewer(bimServerAPI, "viewport");
+            viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
             viewer.drawCanvas = function () {
                 var canvas = viewer.drawCanvas.bind(viewer);
                 canvas[0].getContext("experimental-webgl", {preserveDrawingBuffer: true});
