@@ -1,0 +1,115 @@
+<!doctype html>
+<html ng-app="main">
+  <head>
+    <meta charset="utf-8">
+    <title>AEC Hack</title>
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/LayerList.css">
+    <link rel="stylesheet" href="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ObjectTreeView.css">
+    <link rel="stylesheet" href="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ProgressBar.css">
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="http://scenejs.org/api/latest/scenejs.js"></script>
+
+    <script src="./js/lib/ui-bootstrap-tpls-0.13.4.min.js"></script>
+
+    <script src="./js/angular/app.js"></script>
+    <script src="./js/angular/controller.js"></script>
+
+
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/AsyncStream.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/BIMSURFER.js"></script>
+    <script  type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Constants.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/DataInputStream.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Events.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/GeometryLoader.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/ProgressLoader.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/SceneJS.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/StringView.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Util.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Viewer.js"></script>
+
+
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Ambient.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Camera.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Types/Light/Sun.js"></script>
+
+
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ClickSelect.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/LayerList.js"></script>
+	<script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ObjectTreeView.js"></script>
+	<script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/PickFlyOrbit.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/AECHack-2015-nl-Challenge-Bim4nonBimers/BIMsurfer/master/api/Control/ProgressBar.js"></script>
+
+
+
+    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_Ifc2x3tc1.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_BimServerApi.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_BimServerApiPromise.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_BimServerWebSocket.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_Model.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/opensourceBIM/BIMserver/master/BimServer/www/js/bimserverapi_Translations_EN.js"></script>
+
+      <script src="js/viewer.js"></script>
+
+    <style>
+    	html, body{
+    		height : 100%;
+    	}
+    	#main-holder, .column{
+    		height : 100%;
+    		margin-top : 50px;
+    	}
+    	.right-column{
+    		background : #ccc;
+    	}
+    </style>
+    <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">AEC Hack</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a class="page-scroll" href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+   	<div id="main-holder" class="fluid-container" ng-controller="MainCtrl">
+   		<div class="col-md-8 column">
+   		</div>
+   		<div class="col-md-4 column right-column">
+   		</div>
+   	</div>
+    </body>
+
+</html>
