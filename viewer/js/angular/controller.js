@@ -93,8 +93,9 @@ angular.module('main')
                 }
             }
 
-            function nodeUnselected() {
-//todo: when element is unselected
+            function nodeUnselected(revId, node) {
+                selectedobjects[node.id] = undefined;
+
             }
 
             return {
