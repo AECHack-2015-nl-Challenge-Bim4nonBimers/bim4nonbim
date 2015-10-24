@@ -57,7 +57,11 @@ angular.module('main')
                         	$scope.$apply(function(){
                                 mat.object._rHasProperties.forEach(function(matId){
                                     var material = loadedModel.objects[matId];
-                                    console.log(material.getName());
+                                    if("IfcPropertySingleValue" === material.getType() ){
+                                        console.log(material.getName());
+                                        console.log(material.object._eNominalValue._v);
+
+                                    }
                                     });
                         		var object = {name : mat.getName()};
                         		$scope.propertyLists.push(object)  
