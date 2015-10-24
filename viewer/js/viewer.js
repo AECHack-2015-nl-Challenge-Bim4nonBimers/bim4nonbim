@@ -1,30 +1,7 @@
 var viewer = function () {
     var bimServerApi, viewer;
     var preLoadQuery = {
-        defines: {
-            Representation: {
-                field: "Representation"
-            },
-            ContainsElementsDefine: {
-                field: "ContainsElements",
-                include: {
-                    field: "RelatedElements",
-                    include: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
-                }
-            },
-            IsDecomposedByDefine: {
-                field: "IsDecomposedBy",
-                include: {
-                    field: "RelatedObjects",
-                    include: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
-                }
-            }
-        },
         queries: [
-            {
-                type: "IfcProject",
-                include: ["IsDecomposedByDefine", "ContainsElementsDefine"]
-            },
             {
                 type: "IfcProduct",
                 includeAllSubtypes: true
@@ -62,44 +39,46 @@ var viewer = function () {
     }
 
     return {
-        init: function init(revisionId) {
-            var address = 'http://10.30.22.250:8082/';
+        init: function init() {
+            var address = 'http://10.30.22.250:8082';
             var notifier = new Notifier();
-            bimServerApi = new BimServerApi(address, notifier);
-            bimServerApi.init(function () {
-                bimServerApi.login("admin@bimserver.com ", "admin", true, function (data) {
-                    console.log(data);
-                    start(bimServerApi, revisionId);
+
+            loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
+                bimServerApi = api;
+                bimServerApi.init(function () {
+                    bimServerApi.login("admin@bimserver.com ", "admin", function (data) {
+                        console.log(data);
+                        viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
+                        viewer.loadScene(function () {
+                            var clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
+                            clickSelect.activate();
+                            clickSelect.events.register('select', nodeSelected);
+                            clickSelect.events.register('unselect', nodeUnselected);
+                        }, {useCapture: true});
+
+                        var oidsNotLoaded = [], model, ifcProject;
+                        var models = {};
+                        bimServerApi.getModel(131073, 65539, "ifc2x3tc1", false, function (model) {
+                            model.loaded = true;
+                            console.log("before query");
+                            models[65539] = model;
+                            model.query(preLoadQuery, function (loadedObject) {
+                                console.log(loadedObject);
+                                if (loadedObject.isA("IfcProduct")) {
+                                    oidsNotLoaded.push(loadedObject.oid);
+                                    loadedObject.trans.mode = 0;
+                                }
+                            }).done(function () {
+                                var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
+                                geoLoad.setLoadOids([65539], oidsNotLoaded);
+                                viewer.loadGeometry(geoLoad);
+                            });
+                        });
+
+                    });
                 });
             });
 
-        },
-        start: function start(revisionId) {
-            viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
-            viewer.loadScene(function () {
-                var clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
-                clickSelect.activate();
-                clickSelect.events.register('select', nodeSelected);
-                clickSelect.events.register('unselect', nodeUnselected);
-            }, {useCapture: true});
-
-            var oidsNotLoaded = [], model, ifcProject;
-            model = new Model(bimServerAPI, projectId, revisionId, 'ifc2x3tc1');
-            model.loaded = true;
-            model.query(preLoadQuery, function (loadedObject) {
-                if (loadedObject.getType() == 'IfcProject') {
-                    ifcProject = loadedObject;
-                    loadedObject.trans.mode = 0;
-                }
-                if (loadedObject.isA("IfcProduct")) {
-                    oidsNotLoaded.push(loadedObject.oid);
-                    loadedObject.trans.mode = 0;
-                }
-            }).done(function () {
-                var geoLoad = new GeometryLoader(bimServerApi, model, viewer);
-                geoLoad.setLoadOids([revisionId], oidsNotLoaded);
-                viewer.loadGeometry(geoLoad);
-            });
         }
 
     }
