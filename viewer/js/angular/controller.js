@@ -53,10 +53,13 @@ angular.module('main')
                         var relDefByProp = loadedModel.objects[relId];
                         var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
                         var mat = loadedModel.objects[materialId];
-                        console.log(mat)
                         if("IfcPropertySet" === mat.getType()){
                         	$scope.$apply(function(){
-                        		var object = {name : mat.getName()}
+                                mat.object._rHasProperties.forEach(function(matId){
+                                    var material = loadedModel.objects[matId];
+                                    console.log(material.getName());
+                                    });
+                        		var object = {name : mat.getName()};
                         		$scope.propertyLists.push(object)  
                         	})                       
                         }
