@@ -21,7 +21,7 @@ angular.module('main')
         };
 
         var viewer = function () {
-            var bimServerApi, viewer, loadedModel, clickSelect, selectedobjects = [];
+            var bimServerApi, viewer, loadedModel, clickSelect, firstId, selectedobjects = [];
             var preLoadQuery = {
                 queries: [
                     {
@@ -58,37 +58,41 @@ angular.module('main')
 
 
             function nodeSelected(revId, node) {
-                selectedobjects[node.id] = {selected: true};
-                $scope.$apply(function () {
-                    $scope.propertyLists = []
-                });
-                var object = loadedModel.objects[node.id];
-                if (object) {
-                    var propSets = object.object._rIsDefinedBy;
-                    if (propSets) {
-                        propSets.forEach(function (relId) {
-                            var relDefByProp = loadedModel.objects[relId];
-                            var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
-                            var mat = loadedModel.objects[materialId];
-                            if (mat && "IfcPropertySet" === mat.getType()) {
-                                var object = {name: mat.getName(), oid: relId, isSelected: false, properties: []};
-                                if (mat.object._rHasProperties) {
+                if (!firstId) {
+                    firstId = node.id;
 
-                                    mat.object._rHasProperties.forEach(function (matId) {
-                                        var material = loadedModel.objects[matId];
-                                        if ("IfcPropertySingleValue" === material.getType()) {
-                                            object.properties.push({name: material.getName(), value: material.object._eNominalValue._v})
+                    selectedobjects[node.id] = {selected: true};
+                    $scope.$apply(function () {
+                        $scope.propertyLists = []
+                    });
+                    var object = loadedModel.objects[node.id];
+                    if (object) {
+                        var propSets = object.object._rIsDefinedBy;
+                        if (propSets) {
+                            propSets.forEach(function (relId) {
+                                var relDefByProp = loadedModel.objects[relId];
+                                var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
+                                var mat = loadedModel.objects[materialId];
+                                if (mat && "IfcPropertySet" === mat.getType()) {
+                                    var object = {name: mat.getName(), oid: relId, isSelected: false, properties: []};
+                                    if (mat.object._rHasProperties) {
 
-                                        }
-                                    });
+                                        mat.object._rHasProperties.forEach(function (matId) {
+                                            var material = loadedModel.objects[matId];
+                                            if ("IfcPropertySingleValue" === material.getType()) {
+                                                object.properties.push({name: material.getName(), value: material.object._eNominalValue._v})
+
+                                            }
+                                        });
+                                    }
+                                    $scope.$apply(function () {
+                                        $scope.propertyLists.push(object)
+                                    })
                                 }
-                                $scope.$apply(function () {
-                                    $scope.propertyLists.push(object)
-                                })
-                            }
 
 
-                        });
+                            });
+                        }
                     }
                 }
             }
@@ -144,7 +148,7 @@ angular.module('main')
                     var selectedRel = loadedModel.objects[selectedId];
                     var relatedObjects = selectedRel.object._rRelatedObjects;
                     relatedObjects.forEach(function (oid) {
-                        if(!selectedobjects[oid]) {
+                        if (!selectedobjects[oid]) {
                             clickSelect.pick({nodeId: oid});
                             console.log(loadedModel.objects[oid]);
                         }
