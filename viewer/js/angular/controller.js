@@ -11,13 +11,17 @@ angular.module('main')
     			if(propertyList !== item){
     					item.isSelected = false	
     			}
-    		})
-    		propertyList.isSelected = !propertyList.isSelected
+    		});
+    		propertyList.isSelected = !propertyList.isSelected;
+            if(propertyList.isSelected){
+                viewer.selectObjects(propertyList.oid);
 
-    	}
+            }
+
+    	};
     	
     	var viewer = function () {
-            var bimServerApi, viewer, loadedModel;
+            var bimServerApi, viewer, loadedModel, clickSelect;
             var preLoadQuery = {
                 queries: [
                     {
@@ -75,9 +79,7 @@ angular.module('main')
                         		$scope.propertyLists.push(object)  
                         	})                       
                         }
-//                        console.log(mat.getType());
-                        var relatedObjects = relDefByProp.object._rRelatedObjects; //objects
-                        
+
 
                     });
                 }
@@ -95,10 +97,10 @@ angular.module('main')
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
                         bimServerApi = api;
                         bimServerApi.init(function () {
-                            bimServerApi.login("admin@bimserver.com ", "admin", function (data) {
+                            bimServerApi.login("admin@bimserver.com", "admin", function (data) {
                                 viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                                 viewer.loadScene(function () {
-                                    var clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
+                                    clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
                                     clickSelect.activate();
                                     clickSelect.events.register('select', nodeSelected);
                                     clickSelect.events.register('unselect', nodeUnselected);
@@ -106,11 +108,11 @@ angular.module('main')
 
                                 var oidsNotLoaded = [], model, ifcProject;
                                 var models = {};
-                                bimServerApi.getModel(131073, 65539, "ifc2x3tc1", false, function (model) {
+                                bimServerApi.getModel(196609, 131075, "ifc2x3tc1", false, function (model) {
                                     window.model = model;
                                     loadedModel = model;
                                     model.loaded = true;
-                                    models[65539] = model;
+                                    models[131075] = model;
                                     model.query(preLoadQuery, function (loadedObject) {
 
                                         if (loadedObject.isA("IfcProduct")) {
@@ -119,7 +121,7 @@ angular.module('main')
                                         }
                                     }).done(function () {
                                         var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
-                                        geoLoad.setLoadOids([65539], oidsNotLoaded);
+                                        geoLoad.setLoadOids([131075], oidsNotLoaded);
                                         viewer.loadGeometry(geoLoad);
                                     });
                                 });
@@ -128,6 +130,14 @@ angular.module('main')
                         });
                     });
 
+                },
+                selectObjects: function selectObjects(selectedId) {
+                    var selectedRel = loadedModel.objects[selectedId];
+                    var relatedObjects = selectedRel.object._rRelatedObjects;
+                    relatedObjects.forEach(function(oid){
+                        clickSelect.pick({nodeId: oid});
+                        console.log(loadedModel.objects[oid]);
+                    });
                 }
 
             }
