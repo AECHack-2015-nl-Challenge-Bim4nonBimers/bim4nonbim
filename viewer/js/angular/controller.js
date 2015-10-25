@@ -21,9 +21,9 @@ angular.module('main')
         };
 
         $scope.saveProperty = function(property){
-        	console.log("api call")
+        	console.log("api call");
         	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()})
-        }
+        };
 
         var viewer = function () {
             var loadedModel, clickSelect, firstId, selectedObjectIds = [];
@@ -157,11 +157,12 @@ angular.module('main')
                     }
                 },getSelectedObjects: function getGuids() {
                 	var guids = [];
-                    selectedObjectIds.forEach(function (oid) {
-                        if (!selectedObjectIds[oid]) {
-                            guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
-                        }
-                    });
+                    guids.push({oid: firstId, guid: loadedModel.objects[firstId].getGlobalId()})
+//                    selectedObjectIds.forEach(function (oid) {
+//                        if (!selectedObjectIds[oid]) {
+//                            guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
+//                        }
+//                    });
                     return guids
                 }
 
