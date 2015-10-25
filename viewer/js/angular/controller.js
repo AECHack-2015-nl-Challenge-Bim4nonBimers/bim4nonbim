@@ -24,7 +24,7 @@ angular.module('main')
 
         $scope.saveProperty = function(property){
         	console.log("api call");
-        	$http.post(url, {id:property.oi d, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()});
+        	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()});
         	property.isEditing = false;
         };
 
