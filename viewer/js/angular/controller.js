@@ -4,7 +4,7 @@
 
 angular.module('main')
     .controller('MainCtrl', ['$scope', function ($scope) {
-        $scope.propertyLists = []
+        $scope.propertyLists = [];
 
         $scope.select = function (propertyList) {
             $scope.propertyLists.forEach(function (item) {
@@ -15,13 +15,12 @@ angular.module('main')
             propertyList.isSelected = !propertyList.isSelected;
             if (propertyList.isSelected) {
                 viewer.selectObjects(propertyList.oid);
-
             }
 
         };
 
         var viewer = function () {
-            var bimServerApi, viewer, loadedModel, clickSelect, firstId, selectedobjects = [];
+            var loadedModel, clickSelect, firstId, selectedObjectIds = [];
             var preLoadQuery = {
                 queries: [
                     {
@@ -61,36 +60,32 @@ angular.module('main')
                 if (!firstId) {
                     firstId = node.id;
 
-                    selectedobjects[node.id] = {selected: true};
+                    selectedObjectIds[node.id] = {selected: true};
                     $scope.$apply(function () {
                         $scope.propertyLists = []
                     });
                     var object = loadedModel.objects[node.id];
                     if (object) {
-                        var propSets = object.object._rIsDefinedBy;
-                        if (propSets) {
-                            propSets.forEach(function (relId) {
-                                var relDefByProp = loadedModel.objects[relId];
-                                var materialId = relDefByProp.object._rRelatingPropertyDefinition; //materials
-                                var mat = loadedModel.objects[materialId];
-                                if (mat && "IfcPropertySet" === mat.getType()) {
-                                    var object = {name: mat.getName(), oid: relId, isSelected: false, properties: []};
-                                    if (mat.object._rHasProperties) {
-
-                                        mat.object._rHasProperties.forEach(function (matId) {
+                        var ifcRels = object.object._rIsDefinedBy;
+                        if (ifcRels) {
+                            ifcRels.forEach(function (relId) {
+                                var ifcRel = loadedModel.objects[relId];
+                                if (ifcRel && ifcRel.object._t === 'IfcRelDefinesByProperties' && loadedModel.objects[ifcRel.object._rRelatingPropertyDefinition].object._t
+                                    === 'IfcPropertySet') {
+                                    var propSetId = ifcRel.object._rRelatingPropertyDefinition;
+                                    var propertySet = loadedModel.objects[propSetId];
+                                    var propSetObject = {name: propertySet.object.Name, oid: propSetId, isSelected: false, properties: []};
+                                    if (propertySet.object._rHasProperties) {
+                                        propertySet.object._rHasProperties.forEach(function (matId) {
                                             var material = loadedModel.objects[matId];
-                                            if ("IfcPropertySingleValue" === material.getType()) {
-                                                object.properties.push({name: material.getName(), value: material.object._eNominalValue._v})
-
-                                            }
+                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v})
                                         });
                                     }
                                     $scope.$apply(function () {
-                                        $scope.propertyLists.push(object)
+                                        $scope.propertyLists.push(propSetObject)
                                     })
+
                                 }
-
-
                             });
                         }
                     }
@@ -98,20 +93,20 @@ angular.module('main')
             }
 
             function nodeUnselected(revId, node) {
-                selectedobjects[node.id] = undefined;
+                selectedObjectIds[node.id] = undefined;
 
             }
 
             return {
-                init: function init() {
+                init: function init(projectId,revisionId ) {
                     var address = 'http://10.30.22.250:8082';
                     var notifier = new Notifier();
 
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
-                        bimServerApi = api;
+                        var bimServerApi = api;
                         bimServerApi.init(function () {
                             bimServerApi.login("admin@bimserver.com", "admin", function (data) {
-                                viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
+                                var viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                                 viewer.loadScene(function () {
                                     clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
                                     clickSelect.activate();
@@ -119,13 +114,12 @@ angular.module('main')
                                     clickSelect.events.register('unselect', nodeUnselected);
                                 }, {useCapture: true});
 
-                                var oidsNotLoaded = [], model, ifcProject;
+                                var oidsNotLoaded = [];
                                 var models = {};
-                                bimServerApi.getModel(196609, 196611, "ifc2x3tc1", false, function (model) {
-                                    window.model = model;
+                                bimServerApi.getModel(projectId, revisionId, "ifc2x3tc1", false, function (model) {
                                     loadedModel = model;
                                     model.loaded = true;
-                                    models[196611] = model;
+                                    models[revisionId] = model;
                                     model.query(preLoadQuery, function (loadedObject) {
 
                                         if (loadedObject.isA("IfcProduct")) {
@@ -134,7 +128,7 @@ angular.module('main')
                                         }
                                     }).done(function () {
                                         var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
-                                        geoLoad.setLoadOids([196611], oidsNotLoaded);
+                                        geoLoad.setLoadOids([revisionId], oidsNotLoaded);
                                         viewer.loadGeometry(geoLoad);
                                     });
                                 });
@@ -148,7 +142,7 @@ angular.module('main')
                     var selectedRel = loadedModel.objects[selectedId];
                     var relatedObjects = selectedRel.object._rRelatedObjects;
                     relatedObjects.forEach(function (oid) {
-                        if (!selectedobjects[oid]) {
+                        if (!selectedObjectIds[oid]) {
                             clickSelect.pick({nodeId: oid});
                             console.log(loadedModel.objects[oid]);
                         }
@@ -157,10 +151,6 @@ angular.module('main')
 
             }
         }();
-
-//65539 revisionId
-        viewer.init();
-
-
+        viewer.init(196609, 196611);
     }]);
 
