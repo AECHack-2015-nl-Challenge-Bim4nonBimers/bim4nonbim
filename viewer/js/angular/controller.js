@@ -98,8 +98,7 @@ angular.module('main')
             }
 
             return {
-                init: function init(projectId,revisionId ) {
-                    var address = 'http://10.30.22.250:8082';
+                init: function init(address, projectId, revisionId) {
                     var notifier = new Notifier();
 
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
@@ -151,6 +150,9 @@ angular.module('main')
 
             }
         }();
-        viewer.init(196609, 196611);
+        var address = 'http://10.30.22.250:8082';
+        var projectId = 196609;
+        var revisionId = 196611;
+        viewer.init(address, projectId, revisionId);
     }]);
 
