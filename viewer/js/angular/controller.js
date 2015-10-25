@@ -3,8 +3,9 @@
  */
 
 angular.module('main')
-    .controller('MainCtrl', ['$scope', function ($scope) {
+    .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.propertyLists = [];
+        var url = ""
 
         $scope.select = function (propertyList) {
             $scope.propertyLists.forEach(function (item) {
@@ -17,6 +18,11 @@ angular.module('main')
                 viewer.selectObjects(propertyList.oid);
             }
 
+        };
+
+        $scope.saveProperty = function(property){
+        	console.log("api call");
+        	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()})
         };
 
         var viewer = function () {
@@ -78,7 +84,7 @@ angular.module('main')
                                     if (propertySet.object._rHasProperties) {
                                         propertySet.object._rHasProperties.forEach(function (matId) {
                                             var material = loadedModel.objects[matId];
-                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v})
+                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v, oid: matId})
                                         });
                                     }
                                     $scope.$apply(function () {
@@ -93,8 +99,9 @@ angular.module('main')
             }
 
             function nodeUnselected(revId, node) {
-                selectedObjectIds[node.id] = undefined;
-
+            	if(!!selectedObjectIds[node.id]){
+            		selectedObjectIds[node.id] = undefined;
+            	}
             }
 
             return {
@@ -104,7 +111,7 @@ angular.module('main')
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
                         var bimServerApi = api;
                         bimServerApi.init(function () {
-                            bimServerApi.login("admin@bimserver.com", "admin", function (data) {
+                            bimServerApi.login("admin@admin.com", "admin", function (data) {
                                 var viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                                 viewer.loadScene(function () {
                                     clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
@@ -140,19 +147,30 @@ angular.module('main')
                 selectObjects: function selectObjects(selectedId) {
                     var selectedRel = loadedModel.objects[selectedId];
                     var relatedObjects = selectedRel.object._rRelatedObjects;
-                    relatedObjects.forEach(function (oid) {
-                        if (!selectedObjectIds[oid]) {
-                            clickSelect.pick({nodeId: oid});
-                            console.log(loadedModel.objects[oid]);
-                        }
-                    });
+                    if (relatedObjects) {
+                        relatedObjects.forEach(function (oid) {
+                            if (!selectedObjectIds[oid]) {
+                                clickSelect.pick({nodeId: oid});
+                                console.log(loadedModel.objects[oid]);
+                            }
+                        });
+                    }
+                },getSelectedObjects: function getGuids() {
+                	var guids = [];
+                    guids.push({oid: firstId, guid: loadedModel.objects[firstId].getGlobalId()})
+//                    selectedObjectIds.forEach(function (oid) {
+//                        if (!selectedObjectIds[oid]) {
+//                            guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
+//                        }
+//                    });
+                    return guids
                 }
 
             }
         }();
-        var address = 'http://10.30.22.250:8082';
-        var projectId = 196609;
-        var revisionId = 196611;
+        var address = 'http://10.30.19.178:8082';
+        var projectId = 131073;
+        var revisionId = 131075;
         viewer.init(address, projectId, revisionId);
     }]);
 
