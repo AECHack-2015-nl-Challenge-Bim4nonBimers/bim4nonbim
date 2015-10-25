@@ -146,10 +146,10 @@ angular.module('main')
                             console.log(loadedModel.objects[oid]);
                         }
                     });
-                },getGuids: function getGuids(oids) {
-                    oids.forEach(function (oid) {
+                },getGuids: function getGuids() {
+                    selectedObjectIds.forEach(function (oid) {
                         var guids = [];
-                        if (!oids[oid]) {
+                        if (!selectedObjectIds[oid]) {
                             guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
                         }
                     });
