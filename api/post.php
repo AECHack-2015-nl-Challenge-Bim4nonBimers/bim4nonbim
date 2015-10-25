@@ -44,7 +44,8 @@ $name=$projects[0]->name;
 $POID=$projects[0]->oid;
 
 $transaction = $bimserver->LowLevelStartTransaction($POID)->response->result;
-$change=$bimserver->addStringAttribute($transaction,$bimid,$bimObjKey,$bimObjValue);
+
+$change=$bimserver->setWrappedStringAttribute($transaction,$bimid,"NominalValue","IfcLabel",$bimObjValue);
 
 $endTrans=$bimserver->LowLevelCommitTransaction($transaction);
 
