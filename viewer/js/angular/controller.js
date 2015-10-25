@@ -152,7 +152,8 @@ angular.module('main')
                             console.log(loadedModel.objects[oid]);
                         }
                     });
-                },getGuids: function getGuids(oids) {
+                },
+                getGuids: function getGuids(oids) {
                     oids.forEach(function (oid) {
                         var guids = [];
                         if (!oids[oid]) {
