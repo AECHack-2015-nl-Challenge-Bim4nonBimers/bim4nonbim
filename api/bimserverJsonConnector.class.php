@@ -60,7 +60,7 @@ class bimserverJsonConnector {
     }
 
   public static function drupal_set_message($msg,$state,$flag = false){
-   echo ("\n[$state] $msg\n");
+   //echo ("\n[$state] $msg\n");
   }
 
     /**
