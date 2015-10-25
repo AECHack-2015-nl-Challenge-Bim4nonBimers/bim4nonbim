@@ -113,7 +113,7 @@ angular.module('main')
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
                         var bimServerApi = api;
                         bimServerApi.init(function () {
-                            bimServerApi.login("admin@bimserver.com", "admin", function (data) {
+                            bimServerApi.login("admin@admin.com", "admin", function (data) {
                                 var viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                                 viewer.loadScene(function () {
                                     clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
