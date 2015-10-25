@@ -3,7 +3,7 @@
  */
 
 angular.module('main')
-    .controller('MainCtrl', ['$scope','$http', function ($scope, $http) {
+    .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.propertyLists = [];
         var url = ""
 
@@ -19,11 +19,11 @@ angular.module('main')
             }
 
         };
-        
+
         $scope.saveProperty = function(property){
-        	viewer.getGuids();
-        	$http.post(url, {oid:property.oid, value:property.value})
-        }
+        	console.log("api call");
+        	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()})
+        };
 
         var viewer = function () {
             var loadedModel, clickSelect, firstId, selectedObjectIds = [];
@@ -84,7 +84,7 @@ angular.module('main')
                                     if (propertySet.object._rHasProperties) {
                                         propertySet.object._rHasProperties.forEach(function (matId) {
                                             var material = loadedModel.objects[matId];
-                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v, oid : matId})
+                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v, oid: matId})
                                         });
                                     }
                                     $scope.$apply(function () {
@@ -99,8 +99,9 @@ angular.module('main')
             }
 
             function nodeUnselected(revId, node) {
-                selectedObjectIds[node.id] = undefined;
-
+            	if(!!selectedObjectIds[node.id]){
+            		selectedObjectIds[node.id] = undefined;
+            	}
             }
 
             return {
@@ -146,19 +147,23 @@ angular.module('main')
                 selectObjects: function selectObjects(selectedId) {
                     var selectedRel = loadedModel.objects[selectedId];
                     var relatedObjects = selectedRel.object._rRelatedObjects;
-                    relatedObjects.forEach(function (oid) {
-                        if (!selectedObjectIds[oid]) {
-                            clickSelect.pick({nodeId: oid});
-                            console.log(loadedModel.objects[oid]);
-                        }
-                    });
-                },getGuids: function getGuids() {
-                    selectedObjectIds.forEach(function (oid) {
-                        var guids = [];
-                        if (!oids[oid]) {
-                            guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
-                        }
-                    });
+                    if (relatedObjects) {
+                        relatedObjects.forEach(function (oid) {
+                            if (!selectedObjectIds[oid]) {
+                                clickSelect.pick({nodeId: oid});
+                                console.log(loadedModel.objects[oid]);
+                            }
+                        });
+                    }
+                },getSelectedObjects: function getGuids() {
+                	var guids = [];
+                    guids.push({oid: firstId, guid: loadedModel.objects[firstId].getGlobalId()})
+//                    selectedObjectIds.forEach(function (oid) {
+//                        if (!selectedObjectIds[oid]) {
+//                            guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
+//                        }
+//                    });
+                    return guids
                 }
 
             }
