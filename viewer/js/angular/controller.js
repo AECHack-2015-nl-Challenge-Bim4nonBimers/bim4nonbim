@@ -5,7 +5,7 @@
 angular.module('main')
     .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.propertyLists = [];
-        var url = ""
+        var url = "http://10.30.19.178:888/api/post.php"
 
         $scope.select = function (propertyList) {
             $scope.propertyLists.forEach(function (item) {
@@ -22,7 +22,7 @@ angular.module('main')
 
         $scope.saveProperty = function(property){
         	console.log("api call");
-        	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()})
+        	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()});
         };
 
         var viewer = function () {
