@@ -550,6 +550,55 @@ class bimserverJsonConnector {
   }
 
   /**
+   *
+   */
+  public function metaGetAllAsJson() {
+        return $this->doPost("MetaInterface", "getAllAsJson", NULL);
+    }
+
+    public function LowLevelAbortTransaction($tid) {
+        return $this->doPost("Bimsie1LowLevelInterface", "abortTransaction", array("tid" => $tid));
+    }
+
+    public function LowLevelCommitTransaction($tid,$comment = "No Comment Entered") {
+        return $this->doPost("Bimsie1LowLevelInterface", "commitTransaction", array("tid" => $tid,"comment"=>$comment));
+    }
+
+    /**
+     * @param $poid
+     * @return object Transaction id to use this transaction with.
+     */
+    public function LowLevelStartTransaction($poid) {
+        return $this->doPost("Bimsie1LowLevelInterface", "startTransaction", array("poid" => $poid));
+    }
+
+    public function getDataObjectByGuid($roid,$guid) {
+        return $this->doPost("Bimsie1LowLevelInterface", "getDataObjectByGuid", array("roid" => $roid, "guid" => $guid));
+    }
+
+    public function setStringAttribute($tid,$oid,$attributeName,$value) {
+      return $this->doPost("Bimsie1LowLevelInterface", "setStringAttribute", array("tid" => $tid, "oid" => $oid, "attributeName" => $attributeName, "value" => $value));
+    }
+
+    public function revisionCompare($roid1,$roid2,$compareType,$mcid) {
+        return $this->doPost("ServiceInterface", "compare", array("roid1" => $roid1, "roid2" => $roid2, "sCompareType" => $compareType, "mcid" => $mcid));
+    }
+
+    public function getAllModelCheckers() {
+        return $this->doPost("ServiceInterface", "getAllModelCheckers");
+    }
+
+    public function getDefaultModelCompare() {
+        return $this->doPost("PluginInterface", "getDefaultModelCompare");
+    }
+
+    public function getAllModelCompares() {
+        $params["onlyEnabled"] = TRUE;
+        $ret = $this->doPost("PluginInterface", "getAllModelCompares", $params);
+        return $ret->response;
+    }
+
+    /**
    * Retrieves all Query Engines form the BIMserver
    * @return object
    *   An object (array) of all Query engines within the bimserver that are enabled.
@@ -607,160 +656,160 @@ class bimserverJsonConnector {
 
   public function getServerSettings() {
     $settings = $this->doPost("SettingsInterface", "getServerSettings", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getEmailSenderAddress() {
     $settings = $this->doPost("SettingsInterface", "getEmailSenderAddress", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getServiceRepositoryUrl() {
     $settings = $this->doPost("SettingsInterface", "getServiceRepositoryUrl", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getSiteAddress() {
     $settings = $this->doPost("SettingsInterface", "getSiteAddress", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getSmtpServer() {
     $settings = $this->doPost("SettingsInterface", "getSmtpServer", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function upgradePossible() {
     $settings = $this->doPost("AdminInterface", "upgradePossible", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getVersion() {
     $settings = $this->doPost("AdminInterface", "getVersion", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getSystemInfo() {
     $settings = $this->doPost("AdminInterface", "getSystemInfo", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getServerStartTime() {
     $settings = $this->doPost("AdminInterface", "getServerStartTime", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getServerLog() {
     $settings = $this->doPost("AdminInterface", "getServerLog", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getServerInfo() {
     $settings = $this->doPost("AdminInterface", "getServerInfo", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getMigrations() {
     $settings = $this->doPost("AdminInterface", "getMigrations", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getLogs() {
     $settings = $this->doPost("AdminInterface", "getLogs", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getLatestVersion() {
     $settings = $this->doPost("AdminInterface", "getLatestVersion", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getLastDatabaseReset() {
     $settings = $this->doPost("AdminInterface", "getLastDatabaseReset", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getJavaInfo() {
     $settings = $this->doPost("AdminInterface", "getJavaInfo", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getDatabaseInformation() {
     $settings = $this->doPost("AdminInterface", "getDatabaseInformation", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getBimServerInfo() {
     $settings = $this->doPost("AdminInterface", "getBimServerInfo", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function getAllPlugins() {
     $settings = $this->doPost("AdminInterface", "getAllPlugins", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
 
   public function clearOutputFileCache() {
     $settings = $this->doPost("AdminInterface", "clearOutputFileCache", NULL);
-    if (isset($settings['response']['result'])) {
-      return $settings['response']['result'];
+    if (isset($settings->response->result)) {
+      return $settings->response->result;
     }
     return NULL;
   }
