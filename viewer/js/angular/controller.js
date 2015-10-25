@@ -20,9 +20,9 @@ angular.module('main')
 
         };
 
-        $scope.saveProperty = function (property) {
-            viewer.getGuids();
-            $http.post(url, {oid: property.oid, value: property.value})
+        $scope.saveProperty = function(property){
+        	console.log("api call")
+        	$http.post(url, {id:property.oid, Key : property.name, Value:property.value, objects : viewer.getSelectedObjects()})
         }
 
         var viewer = function () {
@@ -99,8 +99,9 @@ angular.module('main')
             }
 
             function nodeUnselected(revId, node) {
-                selectedObjectIds[node.id] = undefined;
-
+            	if(!!selectedObjectIds[node.id]){
+            		selectedObjectIds[node.id] = undefined;
+            	}
             }
 
             return {
@@ -154,13 +155,14 @@ angular.module('main')
                             }
                         });
                     }
-                }, getGuids: function getGuids() {
+                },getSelectedObjects: function getGuids() {
+                	var guids = [];
                     selectedObjectIds.forEach(function (oid) {
-                        var guids = [];
-                        if (!oids[oid]) {
+                        if (!selectedObjectIds[oid]) {
                             guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
                         }
                     });
+                    return guids
                 }
 
             }
