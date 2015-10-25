@@ -3,8 +3,9 @@
  */
 
 angular.module('main')
-    .controller('MainCtrl', ['$scope', function ($scope) {
+    .controller('MainCtrl', ['$scope','$http', function ($scope, $http) {
         $scope.propertyLists = [];
+        var url = ""
 
         $scope.select = function (propertyList) {
             $scope.propertyLists.forEach(function (item) {
@@ -18,6 +19,11 @@ angular.module('main')
             }
 
         };
+        
+        $scope.saveProperty = function(property){
+        	viewer.getGuids();
+        	$http.post(url, {oid:property.oid, value:property.value})
+        }
 
         var viewer = function () {
             var loadedModel, clickSelect, firstId, selectedObjectIds = [];
@@ -78,7 +84,7 @@ angular.module('main')
                                     if (propertySet.object._rHasProperties) {
                                         propertySet.object._rHasProperties.forEach(function (matId) {
                                             var material = loadedModel.objects[matId];
-                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v})
+                                            propSetObject.properties.push({name: material.object.Name, value: material.object._eNominalValue._v, oid : matId})
                                         });
                                     }
                                     $scope.$apply(function () {
@@ -144,6 +150,13 @@ angular.module('main')
                         if (!selectedObjectIds[oid]) {
                             clickSelect.pick({nodeId: oid});
                             console.log(loadedModel.objects[oid]);
+                        }
+                    });
+                },getGuids: function getGuids() {
+                    selectedObjectIds.forEach(function (oid) {
+                        var guids = [];
+                        if (!oids[oid]) {
+                            guids.push({oid: oid, guid: loadedModel[oid].getGlobalId()})
                         }
                     });
                 }
