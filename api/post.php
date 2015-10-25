@@ -1,6 +1,8 @@
 <?php
 
- if(empty($_POST)) {
+   $POST=$GLOBALS['HTTP_RAW_POST_DATA'];
+ if(empty($POST)) {
+	 var_dump($GLOBALS);
   echo "No POST";
   echo '<html>
 <head><title>test</title></head>
@@ -12,7 +14,7 @@
   exit;
  }
 
- $json=json_decode($_POST['json']);
+ $json=json_decode($POST);
  //var_dump(json_decode($_POST['json']));
  $bimid=$json->id;
  $bimObjKey=$json->Key;
@@ -24,8 +26,9 @@
 
 // echo "[id] $bimid [key] $bimObjKey [value] $bimObjValue [oid] $bimObjectOID [guid] $bimObjectGUID";
 
+ $s='"'.$bimObjectGUID.'","'.$bimObjKey.'","'.$bimObjValue.'"';
  $f=fopen("updates.csv","a");
- fwrite($f,"$bimObjectGUID,$bimObjKey,$bimObjValue\n");
+ fwrite($f,"$s\n");
  fclose($f);
  //exit();
 
@@ -41,10 +44,13 @@ $name=$projects[0]->name;
 $POID=$projects[0]->oid;
 
 $transaction = $bimserver->LowLevelStartTransaction($POID)->response->result;
-$change=$bimserver->setStringAttribute($transaction,$bimid,$bimObjKey,$bimObjValue);
 
-$endTrans=$bimserver->LowLevelAbortTransaction($transaction);
+$change=$bimserver->setWrappedStringAttribute($transaction,$bimid,"NominalValue","IfcLabel",$bimObjValue);
+
+$endTrans=$bimserver->LowLevelCommitTransaction($transaction);
 
 $bimserver->logout();
+
+echo "POID=$POID, ROID=$ROID, NewRoid=".var_export($endTrans,TRUE)."\n";
 
 return $endTrans;

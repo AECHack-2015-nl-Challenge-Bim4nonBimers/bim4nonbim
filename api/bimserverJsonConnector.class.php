@@ -60,7 +60,7 @@ class bimserverJsonConnector {
     }
 
   public static function drupal_set_message($msg,$state,$flag = false){
-   echo ("\n[$state] $msg\n");
+   //echo ("\n[$state] $msg\n");
   }
 
     /**
@@ -578,6 +578,14 @@ class bimserverJsonConnector {
 
     public function setStringAttribute($tid,$oid,$attributeName,$value) {
       return $this->doPost("Bimsie1LowLevelInterface", "setStringAttribute", array("tid" => $tid, "oid" => $oid, "attributeName" => $attributeName, "value" => $value));
+    }
+	
+	public function setWrappedStringAttribute($tid,$oid,$attributeName,$type,$value) {
+      return $this->doPost("Bimsie1LowLevelInterface", "setWrappedStringAttribute", array("tid" => $tid, "oid" => $oid, "attributeName" => $attributeName, "type"=>$type, "value" => $value));
+    }
+	
+	public function addStringAttribute($tid,$oid,$attributeName,$value) {
+      return $this->doPost("Bimsie1LowLevelInterface", "addStringAttribute", array("tid" => $tid, "oid" => $oid, "attributeName" => $attributeName, "value" => $value));
     }
 
     public function revisionCompare($roid1,$roid2,$compareType,$mcid) {
