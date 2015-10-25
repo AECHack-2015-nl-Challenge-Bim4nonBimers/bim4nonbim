@@ -579,6 +579,10 @@ class bimserverJsonConnector {
     public function setStringAttribute($tid,$oid,$attributeName,$value) {
       return $this->doPost("Bimsie1LowLevelInterface", "setStringAttribute", array("tid" => $tid, "oid" => $oid, "attributeName" => $attributeName, "value" => $value));
     }
+	
+	public function addStringAttribute($tid,$oid,$attributeName,$value) {
+      return $this->doPost("Bimsie1LowLevelInterface", "addStringAttribute", array("tid" => $tid, "oid" => $oid, "attributeName" => $attributeName, "value" => $value));
+    }
 
     public function revisionCompare($roid1,$roid2,$compareType,$mcid) {
         return $this->doPost("ServiceInterface", "compare", array("roid1" => $roid1, "roid2" => $roid2, "sCompareType" => $compareType, "mcid" => $mcid));
