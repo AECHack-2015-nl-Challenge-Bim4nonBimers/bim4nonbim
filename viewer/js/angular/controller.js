@@ -5,7 +5,9 @@
 angular.module('main')
     .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.propertyLists = [];
-        var url = ""
+        var url = "";
+        var revisionId;
+        
 
         $scope.select = function (propertyList) {
             $scope.propertyLists.forEach(function (item) {
@@ -105,7 +107,7 @@ angular.module('main')
             }
 
             return {
-                init: function init(address, projectId, revisionId) {
+                init: function init(address, projectId) {
                     var notifier = new Notifier();
 
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
@@ -122,22 +124,29 @@ angular.module('main')
 
                                 var oidsNotLoaded = [];
                                 var models = {};
-                                bimServerApi.getModel(projectId, revisionId, "ifc2x3tc1", false, function (model) {
-                                    loadedModel = model;
-                                    model.loaded = true;
-                                    models[revisionId] = model;
-                                    model.query(preLoadQuery, function (loadedObject) {
+                                bimServerApi.call("Bimsie1ServiceInterface", "getProjectByPoid", {poid: projectId}, function(data){
+                                	revisionId = data.lastRevisionId
+                                	console.log(revisionId)
+							    }).done(function(){
+							    	bimServerApi.getModel(projectId, revisionId, "ifc2x3tc1", false, function (model) {
+	                                    loadedModel = model;
+	                                    model.loaded = true;
+	                                    models[revisionId] = model;
+	                                    model.query(preLoadQuery, function (loadedObject) {
 
-                                        if (loadedObject.isA("IfcProduct")) {
-                                            oidsNotLoaded.push(loadedObject.oid);
-                                            loadedObject.trans.mode = 0;
-                                        }
-                                    }).done(function () {
-                                        var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
-                                        geoLoad.setLoadOids([revisionId], oidsNotLoaded);
-                                        viewer.loadGeometry(geoLoad);
-                                    });
-                                });
+	                                        if (loadedObject.isA("IfcProduct")) {
+	                                            oidsNotLoaded.push(loadedObject.oid);
+	                                            loadedObject.trans.mode = 0;
+	                                        }
+	                                    }).done(function () {
+	                                        var geoLoad = new GeometryLoader(bimServerApi, models, viewer);
+	                                        geoLoad.setLoadOids([revisionId], oidsNotLoaded);
+	                                        viewer.loadGeometry(geoLoad);
+	                                    });
+	                                });
+							    })
+                                
+                                
 
                             });
                         });
@@ -170,7 +179,7 @@ angular.module('main')
         }();
         var address = 'http://10.30.22.250:8082';
         var projectId = 196609;
-        var revisionId = 196611;
-        viewer.init(address, projectId, revisionId);
+        
+        viewer.init(address, projectId);
     }]);
 
