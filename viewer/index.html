@@ -99,6 +99,9 @@
     		padding:8px;
     		border-radius : 2px;
     	}
+    	.fa-button{
+    		cursor:pointer;
+    	}
     	
     </style>
     <body>
@@ -142,7 +145,14 @@
 	   				<i class="fa fa-caret-down" ng-show="propertyList.isCollapsed" ng-click="propertyList.isCollapsed = !propertyList.isCollapsed"></i>{{propertyList.name}}
 	   			</div>
    				<div class="properties-holder" uib-collapse="!propertyList.isCollapsed">
-   					<div class="property-item" ng-repeat="property in propertyList.properties">{{property.name}} : {{property.value}}</div>
+   					<div class="property-item" ng-repeat="property in propertyList.properties">
+   						<span ng-show="!property.isEditing">{{property.name}} : {{property.value}}<i ng-click="property.isEditing = true" class="fa-button fa fa-pencil" style="margin-left : 5px;"></i>
+   						</span>
+   						<span ng-show="property.isEditing">
+   							<input type="text" ng-model="property.value">
+   							<i ng-click="property.isEditing = false" class="fa-button fa fa-check" style="margin-left : 5px;"></i>
+   							</span>
+   					</div>
    				</div>
    			</div>
    		</div>

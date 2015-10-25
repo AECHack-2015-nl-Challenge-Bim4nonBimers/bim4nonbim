@@ -288,9 +288,9 @@ class bimserverJsonConnector {
             $alive = !$info['eof'] && !$info['timed_out'] && $chunk;
         }
         fclose($fp);
-
+        $HTTP_REQUEST_TIMEOUT = 408;
         if ($info['timed_out']) {
-            $result->code = HTTP_REQUEST_TIMEOUT;
+            $result->code = $HTTP_REQUEST_TIMEOUT;
             $result->error = 'request timed out';
             return $result;
         }
@@ -511,14 +511,11 @@ class bimserverJsonConnector {
     $ret = $this->doPost("Bimsie1AuthInterface", "login", $login);
     unset($login);
     //var_dump($ret);
-    if(is_array($ret) && is_array($ret['response'])) {
-      //$this->setLoginToken($ret->response->result);
-      $this->setLoginToken($ret['response']['result']);
-    } else if(is_object($ret) && isset($ret->response)) {
+    if(is_object($ret) && isset($ret->response)) {
         $this->setLoginToken($ret->response->result);
     }
     else {
-      bimserverJsonConnector::drupal_set_message("Login Failed: Return object was not a array",'error',false);
+      bimserverJsonConnector::drupal_set_message("Login Failed: Return object was not an Object",'error',false);
     }
     //var_dump($this->getLoginToken());
     //$this->login_token = $ret['response']['result'];
@@ -874,7 +871,7 @@ class bimserverJsonConnector {
     $fixed = 0;
     $options['data'] = str_replace("\"{}\"", "{}", $options['data'], $fixed);
     if (!empty($fixed)) {
-      bimserverJsonConnector::drupal_set_message('BMS-Bimserver Proxy', "Swapped  '\"{}\"' for '{} [$fixed*]\nProxy Called:=$interface.$methode($params)'.");
+      bimserverJsonConnector::drupal_set_message('BMS-Bimserver Proxy', "Swapped  '\"{}\"' for '{} [$fixed*]\nProxy Called:=$interface.$method($parameters)'.");
       //drupal_set_message("Fixed $fixed \"{}\" to {}.",'warning');
     }
     if($DEBUG) {
