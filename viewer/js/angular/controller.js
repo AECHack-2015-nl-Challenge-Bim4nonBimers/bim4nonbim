@@ -170,7 +170,7 @@ angular.module('main')
         }();
         var address = 'http://10.30.19.178:8082';
         var projectId = 131073;
-        var revisionId = 65539;
+        var revisionId = 131075;
         viewer.init(address, projectId, revisionId);
     }]);
 
