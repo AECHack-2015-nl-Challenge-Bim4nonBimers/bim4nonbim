@@ -104,7 +104,7 @@ angular.module('main')
                     loadBimServerApi(address, notifier, new Date().getTime(), function (api, serverInfo) {
                         var bimServerApi = api;
                         bimServerApi.init(function () {
-                            bimServerApi.login("admin@bimserver.com", "admin", function (data) {
+                            bimServerApi.login("admin@admin.com", "admin", function (data) {
                                 var viewer = new BIMSURFER.Viewer(bimServerApi, "viewport");
                                 viewer.loadScene(function () {
                                     clickSelect = viewer.getControl("BIMSURFER.Control.ClickSelect");
@@ -150,9 +150,9 @@ angular.module('main')
 
             }
         }();
-        var address = 'http://10.30.22.250:8082';
-        var projectId = 196609;
-        var revisionId = 196611;
+        var address = 'http://10.30.19.178:8082';
+        var projectId = 131073;
+        var revisionId = 65539;
         viewer.init(address, projectId, revisionId);
     }]);
 
